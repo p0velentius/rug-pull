@@ -11,7 +11,6 @@ from pymorphy3 import MorphAnalyzer
 from typing import List
 from razdel import tokenize
 from pymorphy3 import MorphAnalyzer
-from rank_bm25 import BM25Okapi
 
 morph = MorphAnalyzer()
 
@@ -33,17 +32,6 @@ def preprocess(text: str) -> List[str]:
         if tok.isalpha():
             out.append(morph.parse(tok)[0].normal_form)
     return out
-
-# Препроцессим
-tokenized_corpus = [preprocess(d) for d in docs]
-bm25 = BM25Okapi(tokenized_corpus)  # можно BM25L/BM25Plus
-def search(query: str, topk: int = 3):
-    q = preprocess(query)
-    scores = bm25.get_scores(q)              # список скорингов по документам
-    print(scores)
-    # берём индексы топ-k
-    top_idx = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:topk]
-    return [(i, scores[i], docs[i]) for i in top_idx]
 
 base_url = "https://raw.githubusercontent.com/p0velentius/rug-pull/main/"
 
