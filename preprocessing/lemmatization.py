@@ -26,7 +26,7 @@ morph = MorphAnalyzer()
 
 base_url = "https://raw.githubusercontent.com/p0velentius/rug-pull/main/"
 
-questions = pd.read_csv(base_url + "questions_preprocessed.csv")
+questions = pd.read_csv(base_url + "questions_preprocessed.csv", index_col=0)
 
 QUESTIONS_TEXT_COL = "query_clean"
 
