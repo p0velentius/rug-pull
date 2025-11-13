@@ -1,21 +1,47 @@
-Preprocessing data
+# 🛠 Data Preprocessing Pipeline
 
-**preprocessing.py**:
-input: questions_clean.csv (6977,  2)
-output: questions_preprocessed.csv (6977,  2)
-< 1 sec.
-*parameters*:
-- do_lower=True,
-- remove_emojis=True,
-- remove_punct=True,
-- remove_polite=True,
-- do_lemmatize=False,
-- remove_short_tokens=True
+## 📊 Input/Output Overview
 
-**questions_preprocessed.csv**:
-- q_id
-- query_clean
-Коротко о решениях:
-- Анонимные числа (0000, XXXX, 0, XX и т.п.) заменяем на <ANON_NUM> — чтобы векторизатор видел один токен вместо множества вариантов.
-- Эмодзи удаляю регуляркой по Unicode-диапазонам (надёжнее, чем вручную).
-- Пунктуация удаляется аккуратно (оставляем только слова и специальные токены вроде <ANON_NUM>).
+| **File** | **Input** | **Output** | **Rows** | **Processing Time** |
+|----------|-----------|------------|----------|-------------------|
+| `preprocessing.py` | `questions_clean.csv` | `questions_preprocessed.csv` | 6,977 | < 1 second |
+
+## ⚙️ Processing Parameters
+
+| **Parameter** | **Value** | **Description** |
+|---------------|-----------|------------------|
+| `do_lower` | `True` | Convert text to lowercase |
+| `remove_emojis` | `True` | Remove all emoji characters |
+| `remove_punct` | `True` | Remove punctuation marks |
+| `remove_polite` | `True` | Remove polite phrases |
+| `do_lemmatize` | `False` | **Disabled** lemmatization |
+| `remove_short_tokens` | `True` | Remove short tokens |
+
+## 📁 Output Structure
+
+The processed file `questions_preprocessed.csv` contains:
+
+| Column | Description |
+|--------|-------------|
+| `q_id` | Question identifier |
+| `query_clean` | Cleaned and processed text query |
+
+## 🎯 Key Processing Features
+
+### 🔢 Anonymous Number Handling
+- **Patterns**: `0000`, `XXXX`, `0`, `XX`, etc.
+- **Replacement**: `⟨ANON_NUM⟩`
+- **Benefit**: Vectorizer recognizes single token instead of multiple variants
+
+### 😊 Emoji Removal
+- **Method**: Regex based on Unicode ranges
+- **Advantage**: More reliable than manual pattern matching
+
+### 📝 Punctuation Cleaning
+- **Approach**: Careful removal while preserving special tokens
+- **Preserved**: Words and special tokens like `⟨ANON_NUM⟩`
+
+## 🚀 Quick Start
+
+```bash
+python preprocessing.py
