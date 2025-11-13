@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # download df
 base_url = "https://raw.githubusercontent.com/p0velentius/rug-pull/main/"
 
-questions = pd.read_csv(base_url + "questions_clean.csv")
+questions = pd.read_csv(base_url + "questions_clean.csv", index_col=0)
 
 print(questions.shape)
 
