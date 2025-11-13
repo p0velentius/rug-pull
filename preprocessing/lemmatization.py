@@ -24,15 +24,6 @@ def lemmatize_ru(text: str) -> list[str]:
 
 morph = MorphAnalyzer()
 
-def preprocess(text: str) -> List[str]:
-    # токенизация + нормализация + фильтр пунктуации/чисел
-    out = []
-    for t in tokenize(text):
-        tok = t.text.lower().replace('ё', 'е')
-        if tok.isalpha():
-            out.append(morph.parse(tok)[0].normal_form)
-    return out
-
 base_url = "https://raw.githubusercontent.com/p0velentius/rug-pull/main/"
 
 questions = pd.read_csv(base_url + "questions_preprocessed.csv")
