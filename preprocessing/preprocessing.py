@@ -107,6 +107,19 @@ def preprocess_text(text: str,
     # 7) нормализовать пробелы
     s = normalize_whitespace(s)
 
+    # 8) (опция) лемматизация
+    if do_lemmatize:
+        lemmas = lemmatize_ru(s)
+        if remove_short_tokens:
+            lemmas = [t for t in lemmas if len(t) >= min_token_len]
+        s = ' '.join(lemmas)
+
+    else:
+        # удалить короткие токены (если нужно) — после пунктуации и нормализации
+        if remove_short_tokens:
+            toks = [t for t in s.split() if len(t) >= min_token_len]
+            s = ' '.join(toks)
+
     return s
 
 # удобная функция для DataFrame
