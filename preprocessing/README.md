@@ -11,7 +11,7 @@
 ### Website Data Processing
 | File | Input | Output | Rows | Columns |
 |------|-------|--------|------|---------|
-| `preprocessing.py` | - | `websites_preprocessed.csv` | 1,938 | 4 |
+| `preprocessing.py` | `websites_updated.csv` | `websites_preprocessed.csv` | 1,938 | 4 |
 | `lemmatization.py` | `websites_preprocessed.csv` | `websites_lemmatizated.csv` | 1,938 | 4 |
 
 ## Processing Parameters
