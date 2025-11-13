@@ -1,47 +1,73 @@
-# 🛠 Data Preprocessing Pipeline
+# Data Preprocessing Pipeline
 
-## 📊 Input/Output Overview
+## Overview
 
-| **File** | **Input** | **Output** | **Rows** | **Processing Time** |
-|----------|-----------|------------|----------|-------------------|
+### Text Cleaning Pipeline
+| File | Input | Output | Rows | Processing Time |
+|------|-------|--------|------|-----------------|
 | `preprocessing.py` | `questions_clean.csv` | `questions_preprocessed.csv` | 6,977 | < 1 second |
+| `lemmatization.py` | `questions_preprocessed.csv` | `questions_lemmatizated.csv` | 6,977 | < 112 seconds |
 
-## ⚙️ Processing Parameters
+### Website Data Processing
+| File | Input | Output | Rows | Columns |
+|------|-------|--------|------|---------|
+| `preprocessing.py` | - | `websites_preprocessed.csv` | 1,938 | 4 |
+| `lemmatization.py` | `websites_preprocessed.csv` | `websites_lemmatizated.csv` | 1,938 | 4 |
 
-| **Parameter** | **Value** | **Description** |
-|---------------|-----------|------------------|
-| `do_lower` | `True` | Convert text to lowercase |
-| `remove_emojis` | `True` | Remove all emoji characters |
-| `remove_punct` | `True` | Remove punctuation marks |
-| `remove_polite` | `True` | Remove polite phrases |
-| `do_lemmatize` | `False` | **Disabled** lemmatization |
-| `remove_short_tokens` | `True` | Remove short tokens |
+## Processing Parameters
 
-## 📁 Output Structure
+### Preprocessing Settings
+- `do_lower`: True
+- `remove_emojis`: True  
+- `remove_punct`: True
+- `remove_polite`: True
+- `do_lemmatize`: False
+- `remove_short_tokens`: True
 
-The processed file `questions_preprocessed.csv` contains:
+## Output Files Structure
 
-| Column | Description |
-|--------|-------------|
-| `q_id` | Question identifier |
-| `query_clean` | Cleaned and processed text query |
+### Questions Data
+**questions_preprocessed.csv** (6,977 x 2)
+- `q_id` - Question identifier
+- `query_clean` - Cleaned text query
 
-## 🎯 Key Processing Features
+**questions_lemmatizated.csv** (6,977 x 2)
+- `q_id` - Question identifier
+- `query_clean` - Lemmatized text query
 
-### 🔢 Anonymous Number Handling
-- **Patterns**: `0000`, `XXXX`, `0`, `XX`, etc.
-- **Replacement**: `⟨ANON_NUM⟩`
-- **Benefit**: Vectorizer recognizes single token instead of multiple variants
+### Websites Data
+**websites_preprocessed.csv** (1,938 x 4)
+- `web_id` - Website identifier
+- `url` - Website URL
+- `kind` - Content type/category
+- `title_clean` - Cleaned title text
+- `text_clean` - Cleaned body text
 
-### 😊 Emoji Removal
-- **Method**: Regex based on Unicode ranges
-- **Advantage**: More reliable than manual pattern matching
+**websites_lemmatizated.csv** (1,938 x 4)
+- `web_id` - Website identifier
+- `url` - Website URL
+- `kind` - Content type/category
+- `title_lemmas` - Lemmatized title text
+- `text_lemmas` - Lemmatized body text
 
-### 📝 Punctuation Cleaning
-- **Approach**: Careful removal while preserving special tokens
-- **Preserved**: Words and special tokens like `⟨ANON_NUM⟩`
+## Processing Features
 
-## 🚀 Quick Start
+### Text Normalization
+- Anonymous number patterns (0000, XXXX, 0, XX, etc.) replaced with `<ANON_NUM>`
+- Consistent token representation for vectorization
+- Unicode-based emoji removal for reliability
+- Careful punctuation removal preserving special tokens
+
+### Lemmatization
+- Converts words to their base/dictionary forms
+- Applied to both questions and website content
+- Maintains original data structure while enhancing text analysis
+
+## Execution
 
 ```bash
+# Run preprocessing
 python preprocessing.py
+
+# Run lemmatization  
+python lemmatization.py
