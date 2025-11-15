@@ -1,10 +1,11 @@
-!pip install FlagEmbedding
+# install FlagEmbedding!
+# pip install FlagEmbedding
 
-# import time
 import pandas as pd
 from tqdm import tqdm
 from FlagEmbedding import FlagReranker
 
+# import time
 # start = time.time()
 
 # ---------------------------
@@ -20,15 +21,19 @@ model = FlagReranker(
 # 2. Загружаем данные
 # ---------------------------
 # q_rrf: q_id, web_id, rrf_score
-# questions: q_id, query_clean
-# websites: web_id, title_clean, text_clean
+# questions: q_id, query_clean -- min preprocessed!
+# websites: web_id, title_clean, text_clean -- min preprocessed!
 
 base_url = "https://raw.githubusercontent.com/p0velentius/rug-pull/main/"
 
 q_rrf = pd.read_csv(base_url + "model/rrf_results.csv")
 questions = pd.read_csv(base_url + "preprocessing/questions_min_preprocessed.csv")
 websites = pd.read_csv(base_url + "preprocessing/websites_min_preprocessed.csv")
+# to test the workability
 # q_rrf = q_rrf.iloc[:1000,:]
+
+# limit text length
+websites["text_clean"] = websites["text_clean"].str.slice(0, 10_000)
 
 print(q_rrf.shape, questions.shape, websites.shape)
 
@@ -49,7 +54,7 @@ df["document_text"] = df["title_clean"] + " " + df["text_clean"]
 # Готовим список пар: (query, document)
 # pairs = list(zip(df["query_clean"].tolist(), df["document_text"].tolist()))
 
-# Приводим тексты к строкам + заменяем NaN
+# Приводим тексты к строкам + заменяем NaN (там была последняя пустая строка)
 df["query_clean"] = df["query_clean"].fillna("").astype(str)
 df["document_text"] = df["document_text"].fillna("").astype(str)
 
@@ -61,7 +66,7 @@ pairs = list(zip(df["query_clean"], df["document_text"]))
 
 
 # Прогоняем батчами
-scores = model.compute_score(pairs, batch_size=16)
+scores = model.compute_score(pairs, batch_size=256)
 
 df["rerank_score"] = scores
 
@@ -105,7 +110,7 @@ q_to_web_list = (
     .rename(columns={"web_id_top5": "web_list"})
 )
 
-q_to_web_list.to_csv("submission.csv", index=False)
+# file for submission
+q_to_web_list.to_csv("reranker_result.csv", index=False)
 
-print("File saved as submission.csv.")
 print(q_to_web_list.head())
